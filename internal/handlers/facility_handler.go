@@ -32,7 +32,7 @@ func (h *FacilityHandler) GetByCode(c *gin.Context) {
 
 	facility, err := h.facilityService.GetByCode(c.Request.Context(), code)
 	if err != nil {
-		if err.Error() == "facility not found" {
+		if services.IsFacilityNotFound(err) {
 			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -54,7 +54,11 @@ func (h *FacilityHandler) Create(c *gin.Context) {
 
 	err = h.facilityService.Create(c.Request.Context(), req)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		if services.IsInvalidCode(err) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
 		return
 	}
 

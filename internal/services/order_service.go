@@ -19,6 +19,18 @@ var (
 	ErrInvalidFacilityCode = errors.New("facility code cannot be empty")
 )
 
+func IsOrderNotFound(err error) bool {
+	return errors.Is(err, ErrOrderNotFound)
+}
+
+func IsFacilityDoesNotExist(err error) bool {
+	return errors.Is(err, ErrFacilityDoesNotExist)
+}
+
+func IsInvalidID(err error) bool {
+	return errors.Is(err, ErrInvalidID)
+}
+
 type OrderService interface {
 	GetAll(ctx context.Context) ([]dto.OrderResponse, error)
 	GetByID(ctx context.Context, id string) (*dto.OrderResponse, error)

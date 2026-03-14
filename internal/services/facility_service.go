@@ -17,6 +17,14 @@ var (
 	ErrInvalidAddress = errors.New("facility address cannot be empty")
 )
 
+func IsFacilityNotFound(err error) bool {
+	return errors.Is(err, ErrFacilityNotFound)
+}
+
+func IsInvalidCode(err error) bool {
+	return errors.Is(err, ErrInvalidCode)
+}
+
 type FacilityService interface {
 	GetAll(ctx context.Context) ([]dto.FacilityResponse, error)
 	GetByCode(ctx context.Context, code string) (*dto.FacilityResponse, error)

@@ -33,7 +33,7 @@ func (h *OrderHandler) GetByID(c *gin.Context) {
 
 	order, err := h.orderService.GetByID(c.Request.Context(), id)
 	if err != nil {
-		if err.Error() == "order not found" {
+		if services.IsOrderNotFound(err) {
 			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -54,7 +54,11 @@ func (h *OrderHandler) Create(c *gin.Context) {
 
 	err = h.orderService.Create(c.Request.Context(), req)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		if services.IsInvalidID(err) || services.IsFacilityDoesNotExist(err) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{"message": "order created successfully"})
