@@ -9,7 +9,7 @@ import (
 type Config struct {
 	DBUser     string `env:"DB_USER,required"`
 	DBPassword string `env:"DB_PASSWORD,required"`
-	DBHost     string `env :"DB_HOST,required"`
+	DBHost     string `env:"DB_HOST,required"`
 	DBPort     int    `env:"DB_PORT,required" envDefault:"3306"`
 	DBName     string `env:"DB_NAME,required"`
 	ServerPort int    `env:"SERVER_PORT,required" envDefault:"8080"`
