@@ -24,13 +24,13 @@ func NewOrderRepository(database *sql.DB) OrderRepository {
 
 func (r *orderRepository) GetAll(ctx context.Context) ([]models.Order, error) {
 	query := `SELECT id, facility_code, status, created_at FROM orders`
-	rows,err := r.db.QueryContext(ctx, query)
+	rows, err := r.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	defer rows.Close()
-	
+
 	orders := []models.Order{}
 	for rows.Next() {
 		var order models.Order
@@ -61,7 +61,7 @@ func (r *orderRepository) GetByID(ctx context.Context, id string) (*models.Order
 
 func (r *orderRepository) Create(ctx context.Context, order models.Order) error {
 	query := `INSERT INTO orders (id,facility_code,status,created_at) VALUES(?,?,?,?)`
-	_, err := r.db.ExecContext(ctx,query,
+	_, err := r.db.ExecContext(ctx, query,
 		order.ID,
 		order.FacilityCode,
 		order.Status,

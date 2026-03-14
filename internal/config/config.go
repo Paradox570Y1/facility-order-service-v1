@@ -1,9 +1,9 @@
 package config
 
 import (
-	"log"
 	"github.com/caarlos0/env/v11"
 	"github.com/joho/godotenv"
+	"log"
 )
 
 type Config struct {
@@ -29,4 +29,3 @@ func Load() {
 	}
 	log.Println("configuration loaded successfully")
 }
-

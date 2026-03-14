@@ -2,10 +2,10 @@ package db
 
 import (
 	"errors"
-	"log"
 	"github.com/golang-migrate/migrate/v4"
 	mysqlmigrate "github.com/golang-migrate/migrate/v4/database/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"log"
 )
 
 func RunMigrations() {

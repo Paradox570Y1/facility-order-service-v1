@@ -2,21 +2,21 @@ package services
 
 import (
 	"context"
-	"time"
 	"errors"
 	"strings"
+	"time"
 
-	"github.com/Paradox570Y1/facility-order-service-v1/internal/repository"
-	"github.com/Paradox570Y1/facility-order-service-v1/internal/models"
-	"github.com/Paradox570Y1/facility-order-service-v1/internal/dto"
 	"github.com/Paradox570Y1/facility-order-service-v1/internal/constants"
+	"github.com/Paradox570Y1/facility-order-service-v1/internal/dto"
+	"github.com/Paradox570Y1/facility-order-service-v1/internal/models"
+	"github.com/Paradox570Y1/facility-order-service-v1/internal/repository"
 )
 
 var (
 	ErrFacilityDoesNotExist = errors.New("facility does not exist")
-	ErrOrderNotFound = errors.New("order not found")
-	ErrInvalidID = errors.New("order id cannot be empty")
-	ErrInvalidFacilityCode = errors.New("facility code cannot be empty")
+	ErrOrderNotFound        = errors.New("order not found")
+	ErrInvalidID            = errors.New("order id cannot be empty")
+	ErrInvalidFacilityCode  = errors.New("facility code cannot be empty")
 )
 
 func IsOrderNotFound(err error) bool {
@@ -38,13 +38,13 @@ type OrderService interface {
 }
 
 type orderService struct {
-	orderRepo repository.OrderRepository
+	orderRepo    repository.OrderRepository
 	facilityRepo repository.FacilityRepository
 }
 
 func NewOrderService(orderRepo repository.OrderRepository, facilityRepo repository.FacilityRepository) OrderService {
 	return &orderService{
-		orderRepo: orderRepo,
+		orderRepo:    orderRepo,
 		facilityRepo: facilityRepo,
 	}
 }
@@ -80,7 +80,7 @@ func (s *orderService) GetByID(ctx context.Context, id string) (*dto.OrderRespon
 	if err != nil {
 		return nil, err
 	}
-    if o == nil {
+	if o == nil {
 		return nil, ErrOrderNotFound
 	}
 
@@ -88,7 +88,7 @@ func (s *orderService) GetByID(ctx context.Context, id string) (*dto.OrderRespon
 	return &order, nil
 }
 func (s *orderService) Create(ctx context.Context, order dto.CreateOrderRequest) error {
-	
+
 	if strings.TrimSpace(order.ID) == "" {
 		return ErrInvalidID
 	}

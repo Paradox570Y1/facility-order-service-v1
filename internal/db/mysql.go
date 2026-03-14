@@ -1,12 +1,12 @@
 package db
 
 import (
-	"log"
-	"fmt"
-	"time"
-	"github.com/Paradox570Y1/facility-order-service-v1/internal/config"
 	"database/sql"
+	"fmt"
+	"github.com/Paradox570Y1/facility-order-service-v1/internal/config"
 	_ "github.com/go-sql-driver/mysql"
+	"log"
+	"time"
 )
 
 var DB *sql.DB
@@ -36,6 +36,6 @@ func Connect() {
 		log.Fatal(err)
 	}
 
-	DB = db;
+	DB = db
 	log.Println("Database connected successfully")
 }

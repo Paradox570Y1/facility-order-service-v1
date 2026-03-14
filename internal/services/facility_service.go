@@ -5,16 +5,16 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/Paradox570Y1/facility-order-service-v1/internal/repository"
-	"github.com/Paradox570Y1/facility-order-service-v1/internal/models"
 	"github.com/Paradox570Y1/facility-order-service-v1/internal/dto"
+	"github.com/Paradox570Y1/facility-order-service-v1/internal/models"
+	"github.com/Paradox570Y1/facility-order-service-v1/internal/repository"
 )
 
 var (
 	ErrFacilityNotFound = errors.New("facility not found")
-	ErrInvalidCode = errors.New("facility code cannot be empty")
-	ErrInvalidName = errors.New("facility name cannot be empty")
-	ErrInvalidAddress = errors.New("facility address cannot be empty")
+	ErrInvalidCode      = errors.New("facility code cannot be empty")
+	ErrInvalidName      = errors.New("facility name cannot be empty")
+	ErrInvalidAddress   = errors.New("facility address cannot be empty")
 )
 
 func IsFacilityNotFound(err error) bool {
@@ -82,7 +82,7 @@ func (s *facilityService) GetByCode(ctx context.Context, code string) (*dto.Faci
 }
 
 func (s *facilityService) Create(ctx context.Context, req dto.CreateFacilityRequest) error {
-	
+
 	if strings.TrimSpace(req.Code) == "" {
 		return ErrInvalidCode
 	}

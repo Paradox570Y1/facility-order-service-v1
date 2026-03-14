@@ -1,11 +1,11 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/Paradox570Y1/facility-order-service-v1/internal/handlers"
-	"github.com/Paradox570Y1/facility-order-service-v1/internal/services"
-	"github.com/Paradox570Y1/facility-order-service-v1/internal/repository"
 	"database/sql"
+	"github.com/Paradox570Y1/facility-order-service-v1/internal/handlers"
+	"github.com/Paradox570Y1/facility-order-service-v1/internal/repository"
+	"github.com/Paradox570Y1/facility-order-service-v1/internal/services"
+	"github.com/gin-gonic/gin"
 )
 
 func RegisterRoutes(router *gin.Engine, db *sql.DB) {
@@ -24,7 +24,7 @@ func RegisterRoutes(router *gin.Engine, db *sql.DB) {
 		facilities.GET("/:code", facilityHandler.GetByCode)
 		facilities.POST("", facilityHandler.Create)
 	}
-	
+
 	orders := router.Group("/orders")
 	{
 		orders.GET("", orderHandler.GetAll)

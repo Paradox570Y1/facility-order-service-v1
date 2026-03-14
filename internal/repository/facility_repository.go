@@ -28,7 +28,7 @@ func (r *facilityRepository) GetAll(ctx context.Context) ([]models.Facility, err
 	if err != nil {
 		return nil, err
 	}
-	
+
 	defer rows.Close()
 
 	facilities := []models.Facility{}
@@ -61,11 +61,11 @@ func (r *facilityRepository) GetByCode(ctx context.Context, code string) (*model
 
 func (r *facilityRepository) Create(ctx context.Context, facility models.Facility) error {
 	query := `INSERT INTO facilities (code,name,address) VALUES(?,?,?)`
-	_, err := r.db.ExecContext(ctx,query,
+	_, err := r.db.ExecContext(ctx, query,
 		facility.Code,
 		facility.Name,
 		facility.Address,
 	)
-	
+
 	return err
 }

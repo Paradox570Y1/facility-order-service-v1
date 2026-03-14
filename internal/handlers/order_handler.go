@@ -3,9 +3,9 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/Paradox570Y1/facility-order-service-v1/internal/dto"
 	"github.com/Paradox570Y1/facility-order-service-v1/internal/services"
+	"github.com/gin-gonic/gin"
 )
 
 type OrderHandler struct {
