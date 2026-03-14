@@ -8,4 +8,5 @@ import (
 func main() {
 	config.Load()
 	db.Connect()
+	db.RunMigrations()
 }
