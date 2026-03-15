@@ -59,7 +59,7 @@ DB_PASSWORD=your_password
 DB_HOST=localhost
 DB_PORT=3306
 DB_NAME=facility_order_service
-SERVER_PORT=8080
+SERVER_PORT=8081
 KAFKA_BROKERS=localhost:9092
 ```
 

@@ -12,7 +12,7 @@ type Config struct {
 	DBHost     string `env:"DB_HOST,required"`
 	DBPort     int    `env:"DB_PORT,required" envDefault:"3306"`
 	DBName     string `env:"DB_NAME,required"`
-	ServerPort string `env:"SERVER_PORT,required" envDefault:"8080"`
+	ServerPort string `env:"SERVER_PORT,required" envDefault:"8081"`
 	KafkaBrokers string `env:"KAFKA_BROKERS,required" envDefault:"localhost:9092"`
 }
 
