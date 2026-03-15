@@ -8,12 +8,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterRoutes(router *gin.Engine, db *sql.DB) {
+func RegisterRoutes(router *gin.Engine, db *sql.DB, kafkaBrokers string) {
 	facilityRepo := repository.NewFacilityRepository(db)
 	orderRepo := repository.NewOrderRepository(db)
 
 	facilityService := services.NewFacilityService(facilityRepo)
-	orderService := services.NewOrderService(orderRepo, facilityRepo)
+	orderService := services.NewOrderService(orderRepo, facilityRepo, kafkaBrokers)
 
 	facilityHandler := handlers.NewFacilityHandler(facilityService)
 	orderHandler := handlers.NewOrderHandler(orderService)

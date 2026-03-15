@@ -60,6 +60,7 @@ DB_HOST=localhost
 DB_PORT=3306
 DB_NAME=facility_order_service
 SERVER_PORT=8080
+KAFKA_BROKERS=localhost:9092
 ```
 
 ## 4. Run Server
@@ -68,3 +69,122 @@ go run ./cmd/api
 ```
 
 Server starts at `http://localhost:8080`
+
+---
+
+# Kafka Setup (Ubuntu)
+
+This section covers setting up Apache Kafka for event streaming on Ubuntu.
+
+## Prerequisites
+- Docker and Docker Compose installed
+- Port 9092 available for Kafka
+- Port 2181 available for Zookeeper
+
+## 1. Install Docker on Ubuntu
+
+### Using Official Docker Installation Script
+```bash
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# Use Docker without sudo (optional)
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+### Verify Installation
+```bash
+docker --version
+docker compose version
+```
+
+## 2. Update Environment Variables
+
+Ensure Kafka broker address is added to `.env`:
+```env
+KAFKA_BROKERS=localhost:9092
+```
+
+## 3. Start Kafka
+
+The `docker-compose.yml` file contains Zookeeper and Kafka configuration.
+
+### Start Services
+```bash
+docker compose up -d
+```
+
+### Check Status
+```bash
+docker compose ps
+```
+
+You should see:
+- `zookeeper` - RUNNING
+- `kafka` - RUNNING
+- `kafka-ui` - RUNNING
+
+### View Kafka UI (Optional)
+Open browser: `http://localhost:8080`
+
+## 4. Create Kafka Topic
+
+Create the `order_created` topic:
+```bash
+docker compose exec kafka kafka-topics \
+  --create \
+  --topic order_created \
+  --bootstrap-server localhost:9092 \
+  --partitions 1 \
+  --replication-factor 1
+```
+
+### Verify Topic Creation
+```bash
+docker compose exec kafka kafka-topics --list --bootstrap-server localhost:9092
+```
+
+You should see `order_created` in the output.
+
+## 5. Run Application with Kafka
+
+Start the application:
+```bash
+go run ./cmd/api
+```
+
+You should see:
+```
+✓ Consumer started, waiting for messages...
+```
+
+## 6. Test Event Publishing
+
+### Create an Order
+```bash
+curl -X POST http://localhost:8080/orders \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "ORD001",
+    "facility_code": "VND-2404"
+  }'
+```
+
+### Check Application Logs
+
+In the terminal where your app is running, you should see:
+
+```
+✓ Published order created: order_id=ORD001, facility_code=VND-2404
+📦 Order Created Event Received:
+   - Order ID: ORD001
+   - Facility Code: VND-2404
+   ─────────────────────────────────
+```
+
+## 7. Stop Kafka
+
+```bash
+docker compose down
+```

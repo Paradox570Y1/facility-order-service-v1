@@ -3,11 +3,13 @@ package services
 import (
 	"context"
 	"errors"
+	"log"
 	"strings"
 	"time"
 
 	"github.com/Paradox570Y1/facility-order-service-v1/internal/constants"
 	"github.com/Paradox570Y1/facility-order-service-v1/internal/dto"
+	"github.com/Paradox570Y1/facility-order-service-v1/internal/kafka"
 	"github.com/Paradox570Y1/facility-order-service-v1/internal/models"
 	"github.com/Paradox570Y1/facility-order-service-v1/internal/repository"
 )
@@ -40,12 +42,14 @@ type OrderService interface {
 type orderService struct {
 	orderRepo    repository.OrderRepository
 	facilityRepo repository.FacilityRepository
+	kafkaBrokers string
 }
 
-func NewOrderService(orderRepo repository.OrderRepository, facilityRepo repository.FacilityRepository) OrderService {
+func NewOrderService(orderRepo repository.OrderRepository, facilityRepo repository.FacilityRepository, kafkaBrokers string) OrderService {
 	return &orderService{
 		orderRepo:    orderRepo,
 		facilityRepo: facilityRepo,
+		kafkaBrokers: kafkaBrokers,
 	}
 }
 
@@ -112,5 +116,17 @@ func (s *orderService) Create(ctx context.Context, order dto.CreateOrderRequest)
 		CreatedAt:    time.Now(),
 	}
 
-	return s.orderRepo.Create(ctx, newOrder)
+	err = s.orderRepo.Create(ctx, newOrder)
+	if err != nil {
+		return err
+	}
+
+	go func() {
+		err := kafka.PublishOrderCreated(context.Background(), s.kafkaBrokers, newOrder.ID, newOrder.FacilityCode)
+		if err != nil {
+			log.Printf("Failed to publish order to Kafka: %v", err)
+		}
+	}()
+
+	return nil
 }
